@@ -4,13 +4,14 @@ import {BrowserRouter as  Router , Switch , Route } from 'react-router-dom'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import Dashboard from './pages/Dashboard'
+import Category from './pages/categories/category'
 
 
 function App() {
   return (
-    <div className="App">
       <Router>
         <Header />
+        <Category/>
         <Switch>
           <Route path="/" exact component={Dashboard} />
           <Route path="/login" exact component={Login} />
@@ -18,7 +19,6 @@ function App() {
           <Route>404 Not Found</Route>
         </Switch>
       </Router>
-    </div>
   );
 }
 

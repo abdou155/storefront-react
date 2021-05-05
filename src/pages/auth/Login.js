@@ -1,30 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link as RouterLink } from 'react-router-dom'
 import Container from '@material-ui/core/Container';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { useSelector, useDispatch } from 'react-redux'
+import Alert from '@material-ui/lab/Alert';
+import { setLogin, setLoginFailed, setLoginSuccess } from '../../stores/auth/auth.action';
+import axios from 'axios'
+import { TokenGraph } from './token.gql'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,11 +37,58 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
+
+export default function Login(props) {
   const classes = useStyles();
+
+  const currentUser = useSelector(state => state.currentUser)
+  const [loading, setloading] = useState(false)
+  const [errors, setErrors] = useState(false)
+  const dispatch = useDispatch()
+
+  const handleEmailChange = (e) => {
+    currentUser.user.email = e.target.value
+  }
+  const handlePasswordChange = (e) => {
+    currentUser.user.password = e.target.value
+  }
+
+
+  const Login = (userState) => {
+    //USER_LOGIN
+    dispatch(setLogin(userState))
+    axios({
+      url: 'http://localhost/magento2/graphql',
+      method: 'POST',
+      data: TokenGraph(currentUser.user)
+    }).then((token) => {
+      //USER_LOGIN_ERROR
+      if (token.data.errors) {
+        dispatch(setLoginFailed(token.data.errors))
+        setErrors(true)
+      } else {
+      //USER_LOGIN_SUCCESS
+        const accesToken = token.data.data.generateCustomerToken.token
+        dispatch(setLoginSuccess(accesToken))
+        setErrors(false)
+        props.history.push('/')
+      }
+      setloading(false)
+    })
+  }
+
+
+  const onSubmitForm = (e) => {
+    e.preventDefault()
+    setloading(true)
+    Login(currentUser)
+  }
 
   return (
     <Container component="main" maxWidth="xs">
+      <br />
+      {loading === true ? (<div><LinearProgress /></div>) : (<div></div>)}
+      {errors ? (<div><Alert severity="error">{currentUser.errors[0].message}</Alert></div>) : (<div></div>)}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -59,8 +97,9 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={onSubmitForm}>
           <TextField
+            onChange={handleEmailChange}
             variant="outlined"
             margin="normal"
             required
@@ -72,6 +111,7 @@ export default function Login() {
             autoFocus
           />
           <TextField
+            onChange={handlePasswordChange}
             variant="outlined"
             margin="normal"
             required
@@ -81,10 +121,6 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
           />
           <Button
             type="submit"
@@ -96,22 +132,14 @@ export default function Login() {
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link component={RouterLink} to={`/register/`} variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }

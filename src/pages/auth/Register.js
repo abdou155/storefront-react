@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,16 +8,15 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import Alert from '@material-ui/lab/Alert';
 import Container from '@material-ui/core/Container';
-import UseAuth from './UseAuth'
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { useSelector, useDispatch } from 'react-redux'
 import { setRegistred , setRegistredFailed, setRegistredSuccess , setLoginSuccess} from '../../stores/auth/auth.action'
-
 import { mygraph } from './auth.gql'
-import { signUpUser , loginUser} from './services'
 import axios from 'axios';
 import {TokenGraph} from './token.gql'
+import { Link as RouterLink } from 'react-router-dom'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -65,7 +64,6 @@ export default function Register(props) {
   const Register = (userState) => {
     //USER_REGISTER
     dispatch(setRegistred(userState))
-
     axios({
       url: 'http://localhost/magento2/graphql',
       method: 'POST',
@@ -84,16 +82,14 @@ export default function Register(props) {
             method: 'POST',
             data: TokenGraph(currentUser.user)
         }).then((token)=>{
+          //USER_LOGIN_SUCCESS
           const accesToken = token.data.data.generateCustomerToken.token
-          console.log(accesToken);
           dispatch(setLoginSuccess(accesToken))
           props.history.push('/')
         })
       }
       setloading(false)
     })
-    
-
   }
 
 
@@ -103,27 +99,6 @@ export default function Register(props) {
     e.preventDefault()
     setloading(true)
     Register(currentUser)
-    
-
-    // e.preventDefault()
-    // setloading(true)
-    // signUpUser(currentUser.user).then((data)=>{
-    //   loginUser(data)
-    //   setloading(false)
-    //   console.log(data);
-    // })
-  
-   
-    // console.log(currentUser);
-    // e.preventDefault();
-    // setloading(true)
-    // UseAuth(currentUser.user).then((res) => {
-    //   setloading(false)
-    //   console.log(res);   
-    // })
-    // currentUser.isLogged = true
-    // dispatch(setRegistred(currentUser))
-
   }
 
   return (
@@ -131,7 +106,7 @@ export default function Register(props) {
       <br />
       {loading === true ? (<div><LinearProgress /></div>) : (<div></div>)}
 
-      {errors ? (<div>{currentUser.errors[0].message}</div>) : (<div></div>)}
+      {errors ? (<div><Alert severity="error">{currentUser.errors[0].message}</Alert></div>) : (<div></div>)}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -204,7 +179,7 @@ export default function Register(props) {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link component={RouterLink} to={`/login/`} variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
