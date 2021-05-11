@@ -1,6 +1,11 @@
 import {ActionTypes} from './auth.constant'
 
-
+export const getUser = (customer) =>{
+    return {
+        type: ActionTypes.GET_USER_INFO,
+        payload : customer
+    }
+}
 
 export const setRegistred = (customer) => {
     return {
@@ -49,6 +54,7 @@ export const setLoginFailed = (errors) => {
 
 export const setLogout = (customer) => {
     localStorage.removeItem("accesToken")
+    localStorage.removeItem("cart")
     return {
         type: ActionTypes.USER_LOGOUT,
         payload: customer

@@ -13,9 +13,12 @@ import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { useSelector, useDispatch } from 'react-redux'
 import Alert from '@material-ui/lab/Alert';
-import { setLogin, setLoginFailed, setLoginSuccess } from '../../stores/auth/auth.action';
+import { getUser, setLogin, setLoginFailed, setLoginSuccess } from '../../stores/auth/auth.action';
 import axios from 'axios'
 import { TokenGraph } from './token.gql'
+import { getUserInfo } from './userInfo.utils'
+import {createCustomerCart } from '../../stores/cart/cart.action'
+import { getUserCart } from '../cart/CustomerCart';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,6 +57,7 @@ export default function Login(props) {
   }
 
 
+
   const Login = (userState) => {
     //USER_LOGIN
     dispatch(setLogin(userState))
@@ -67,10 +71,16 @@ export default function Login(props) {
         dispatch(setLoginFailed(token.data.errors))
         setErrors(true)
       } else {
-      //USER_LOGIN_SUCCESS
+        //USER_LOGIN_SUCCESS
         const accesToken = token.data.data.generateCustomerToken.token
         dispatch(setLoginSuccess(accesToken))
+        getUserInfo(accesToken).then((data)=> {
+          dispatch(getUser(data))  
+        })
         setErrors(false)
+        getUserCart(accesToken).then((data)=>{
+          dispatch(createCustomerCart(data))
+        })
         props.history.push('/')
       }
       setloading(false)

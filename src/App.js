@@ -5,9 +5,11 @@ import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import Dashboard from './pages/Dashboard'
 import Category from './pages/categories/category'
+import Checkout from './pages/checkout/Checkout'
 
 
 function App() {
+
   return (
       <Router>
         <Header />
@@ -16,6 +18,7 @@ function App() {
           <Route path="/" exact component={Dashboard} />
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
+          <Route path="/checkout" exact component={Checkout} />
           <Route>404 Not Found</Route>
         </Switch>
       </Router>

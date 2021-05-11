@@ -12,10 +12,14 @@ import Alert from '@material-ui/lab/Alert';
 import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { useSelector, useDispatch } from 'react-redux'
-import { setRegistred , setRegistredFailed, setRegistredSuccess , setLoginSuccess} from '../../stores/auth/auth.action'
+import { setRegistred , getUser , setRegistredFailed, setRegistredSuccess , setLoginSuccess} from '../../stores/auth/auth.action'
 import { mygraph } from './auth.gql'
 import axios from 'axios';
 import {TokenGraph} from './token.gql'
+import { getUserInfo } from './userInfo.utils'
+import {createCustomerCart } from '../../stores/cart/cart.action'
+import { getUserCart } from '../cart/CustomerCart';
+
 import { Link as RouterLink } from 'react-router-dom'
 
 
@@ -85,6 +89,12 @@ export default function Register(props) {
           //USER_LOGIN_SUCCESS
           const accesToken = token.data.data.generateCustomerToken.token
           dispatch(setLoginSuccess(accesToken))
+          getUserInfo(accesToken).then((data)=> {
+            dispatch(getUser(data))  
+          })
+          getUserCart(accesToken).then((data)=>{
+            dispatch(createCustomerCart(data))
+          })
           props.history.push('/')
         })
       }

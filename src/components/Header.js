@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom'
 import { useSelector , useDispatch } from 'react-redux'
 import { setLogout } from '../stores/auth/auth.action';
 import Avatar from '@material-ui/core/Avatar';
-import Cart from './Cart'
+import Cart from '../pages/cart/Cart'
 import HomeIcon from '@material-ui/icons/Home';
 
 const useStyles = makeStyles((theme) => ({

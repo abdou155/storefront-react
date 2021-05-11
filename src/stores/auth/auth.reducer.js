@@ -6,6 +6,7 @@ const initialState = {
         lastname: "",
         email: "",
         password: "",
+        adress: {}
     },
     isLogged: false,
     token: "",
@@ -14,9 +15,13 @@ const initialState = {
 
 export const currentUser = (state = initialState, { type, payload }) => {
     switch (type) {
+        case ActionTypes.GET_USER_INFO:
+            return { 
+                ...state, 
+                user : payload
+            }
         case ActionTypes.USER_REGISTER:
             return { ...state, payload }
-
         case ActionTypes.USER_REGISTER_SUCCESS:
             state.errors = []
             return { ...state }
@@ -37,7 +42,7 @@ export const currentUser = (state = initialState, { type, payload }) => {
             return { ...state }
 
         case ActionTypes.USER_LOGOUT:
-            return {...state}
+            return { ...state }
 
         default:
             return state

@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import IconButton from '@material-ui/core/IconButton';
 import Box from '@material-ui/core/Box';
+import { Link } from 'react-router-dom'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -14,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SimplePopover() {
+export default function CartButton() {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -28,6 +29,8 @@ export default function SimplePopover() {
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
+
+
 
     return (
         <div>
@@ -51,7 +54,7 @@ export default function SimplePopover() {
             >
                 <Box p={3} >
                     <Typography className={classes.typography}>The content of the Cart.</Typography>
-                    <Button variant="contained" color="secondary">Proceed to checkout</Button>
+                    <Button variant="contained" component={Link} to={'/checkout'} color="secondary">Proceed to checkout</Button>
                 </Box>
             </Popover>
         </div>
