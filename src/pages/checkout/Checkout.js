@@ -61,13 +61,14 @@ const steps = ['Adresse de livraison', 'Détails de payment ', "Résumer d'ordre
 
 export default function Checkout() {
 
-    const [shipInfo, setshipInfo] = useState({})
+    /* const [shipInfo, setshipInfo] = useState({})
     const currentUser = useSelector(state => state.currentUser)
+    const dispatch = useDispatch() */
 
     function getStepContent(step) {
         switch (step) {
             case 0:
-                return <FirstStep Info={shipInfo => setshipInfo(shipInfo)} />;
+                return <FirstStep /* Info={shipInfo => setshipInfo(shipInfo)} */ />;
             case 1:
                 return <PaymentForm />;
             case 2:
@@ -78,10 +79,10 @@ export default function Checkout() {
     }
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
-    const dispatch = useDispatch()
+    
 
     const handleNext = () => {
-        setshipInfo(()=> {
+        /* setshipInfo(()=> {
             return {
                 ...shipInfo
             }
@@ -91,7 +92,7 @@ export default function Checkout() {
             dispatch(setAdressForm(shipInfo))
         }else{
             dispatch(setAdressForm(currentUser.user.addresses[0]))
-        }
+        } */
         setActiveStep(activeStep + 1);
     };
 
@@ -99,17 +100,6 @@ export default function Checkout() {
         setActiveStep(activeStep - 1);
     };
 
-   /*  const currentCart = useSelector(state => state.cartReducer, console.log('called'))
-
-    if (currentCart.cartId !== "") {
-        console.log('cart deja creeer !!!!!', currentCart);
-    } else {
-        axiosClient(createCartQuery).then((res) => {
-            dispatch(setCart(res.data.data.createEmptyCart))
-            //add sample products
-        })
-    }
- */
     return (
         <React.Fragment>
             <CssBaseline />

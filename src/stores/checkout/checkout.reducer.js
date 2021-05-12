@@ -2,8 +2,9 @@ import { ActionTypes } from './checkout.constants'
 
 
 const initialState = {
+    isEmpty : true ,
     adressInfo: {},
-    shipMethod: "reservation"
+    shipMethod: []
 }
 
 export const checkoutReducer = (state = initialState, { type, payload }) => {

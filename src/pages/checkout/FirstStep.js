@@ -25,23 +25,23 @@ function FirstStep(props) {
             content = <GetUserAdress/>
         }
 
-        const dispatch = useDispatch()
+        // const dispatch = useDispatch()
 
-        const [value, setValue] = React.useState('reservation');
+        // const [value, setValue] = React.useState('reservation');
 
-        const handleChange = (event) => {
-            setValue(event.target.value);
-            dispatch(setShipMethod(event.target.value))
-            setadForm(()=> {
-                return {
-                    ...adForm, 
-                    shipMethod : value
-                }
-            })
+        // const handleChange = (event) => {
+        //     setValue(event.target.value);
+        //     dispatch(setShipMethod(event.target.value))
+        //     setadForm(()=> {
+        //         return {
+        //             ...adForm, 
+        //             shipMethod : value
+        //         }
+        //     })
 
 
-            return props.Info(adForm)
-        };
+        //     return props.Info(adForm)
+        // };
 
 
 
@@ -52,7 +52,7 @@ function FirstStep(props) {
                         content
                     }
                 </Box>
-                <Box p={3}>
+               {/*  <Box p={3}>
                     <FormControl component="fieldset">
                         <FormLabel component="legend" >Mehode de Livraison</FormLabel>
                         <RadioGroup row aria-label="gender" name="gender1" value={value} onChange={handleChange}>
@@ -60,7 +60,7 @@ function FirstStep(props) {
                             <FormControlLabel value="aramex" control={<Radio />} label="Aramex" />
                         </RadioGroup>
                     </FormControl>
-                </Box>
+                </Box> */}
             </React.Fragment>
         )
     }
